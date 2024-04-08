@@ -11,7 +11,7 @@ namespace RedZone.Infrastructure.Persistence
 {
     public class RedZoneDB : IdentityDbContext<User>
     {
-        public RedZoneDB(DbContextOptions options) : base(options) { }
+        public RedZoneDB(DbContextOptions<RedZoneDB> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -39,9 +39,10 @@ namespace RedZone.Infrastructure.Persistence
             var admin = await userManager.FindByNameAsync(UserName);
             if (admin == null)
             {
-                admin = User.Create("كابتن كريم", "+201141962411", "karim557@gmail.com");
+                admin = User.Create("كابتن كريم", "+201141962411", "karim557@gmail.com",UserName);
                 
-                await userManager.CreateAsync(admin, testUserPw);
+                var result =  await userManager.CreateAsync(admin, testUserPw);
+                var suc = result.Succeeded;
             }
 
             if (admin == null)

@@ -11,7 +11,8 @@ namespace RedZone.api.Common.Mapping
     {
         public void Register(TypeAdapterConfig config)
         {
-            config.NewConfig<RegisterRequest, RegisterCommand>();
+            config.NewConfig<RegisterRequest, RegisterCommand>()
+                .Map(des=>des.password,src=>src.password);
             config.NewConfig<LoginRequest, LoginQuery>();
             config.NewConfig<AuthResult, AuthResponse>()
                 .Map(des=>des.Token,src=>src.Token)

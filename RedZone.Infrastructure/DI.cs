@@ -35,9 +35,11 @@ namespace RedZone.Infrastructure
 
         public static IServiceCollection AddPersistence(this IServiceCollection services)
         {
+            services.AddDbContext<RedZoneDB>(options=>options.UseSqlServer("Server=DESKTOP-O4872J7;Database=RedZone;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=Yes"));
             services.AddIdentity<User, IdentityRole>(options =>
             {
-                options.User.RequireUniqueEmail = false;
+                options.User.RequireUniqueEmail = true;
+                options.User.AllowedUserNameCharacters = "";
             })
                 .AddEntityFrameworkStores<RedZoneDB>();
             

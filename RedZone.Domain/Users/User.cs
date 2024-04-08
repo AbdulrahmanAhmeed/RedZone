@@ -17,10 +17,12 @@ namespace RedZone.Domain.Users
         private User(
         string name,
         string email,
-        string phoneNumber
+        string phoneNumber,
+        string userName = "User"
         )
         
         {
+            UserName = userName;
             Name = name;
             Email = email;
             PhoneNumber = phoneNumber;
@@ -29,12 +31,14 @@ namespace RedZone.Domain.Users
         public static User Create(
         string name,
         string phoneNumber,
-        string email)
+        string email,
+        string userName = "User")
         {
             return new User(
                 name,
                 email,
-                phoneNumber);
+                phoneNumber,
+                userName);
         }
     }
 

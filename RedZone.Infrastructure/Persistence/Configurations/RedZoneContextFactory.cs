@@ -13,7 +13,7 @@ namespace RedZone.Infrastructure.Persistence.Configurations
         public RedZoneDB CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<RedZoneDB>();
-            optionsBuilder.UseSqlServer("Server=DESKTOP-O4872J7;Database=BuberDinners;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=Yes");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-O4872J7;Database=RedZone;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=Yes");
 
             return new RedZoneDB(optionsBuilder.Options);
         }
