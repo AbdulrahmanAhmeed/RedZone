@@ -1,0 +1,6 @@
+@RedZoneApi_HostAddress = http://localhost:5004
+
+GET {{RedZoneApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
