@@ -7,10 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RedZone.App.Auth.Queries.Login
+namespace RedZone.App.Auth.Queries.VerifyEmail
 {
     
     public record VerifyEmailQuery(
-        string Email,
-        string password) : IRequest<ErrorOr<AuthResult>>;
+        string UserId,
+        string Code) : IRequest<ErrorOr<AuthResult>>;
 }

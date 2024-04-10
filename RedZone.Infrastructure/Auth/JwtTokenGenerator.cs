@@ -10,6 +10,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
+using Microsoft.Extensions.Configuration;
 
 namespace RedZone.Infrastructure.Auth
 {
@@ -22,6 +24,29 @@ namespace RedZone.Infrastructure.Auth
         {
             _dateTimeProvider = dateTimeProvider;
             _jwtSettings = jwtSettings.Value;
+        }
+
+        public string GenerateAccessToken(IEnumerable<Claim> claims)
+        {
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
+            var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+            var InputClaims = new ClaimsIdentity();
+            foreach (var claim in claims)
+            {
+                InputClaims.AddClaim(claim);
+            }
+
+            var jwtTokenHandler = new JwtSecurityTokenHandler();
+            var tokenDes = new SecurityTokenDescriptor
+            {
+                Subject = InputClaims,
+                Expires = DateTime.UtcNow.AddMinutes(10),
+                SigningCredentials = signinCredentials
+
+            };
+            var token = jwtTokenHandler.CreateToken(tokenDes);
+            var jwtToken = jwtTokenHandler.WriteToken(token);
+            return jwtToken;
         }
 
         public string GenerateToken(User user)
@@ -45,6 +70,37 @@ namespace RedZone.Infrastructure.Auth
                 expires: _dateTimeProvider.UtcNow.AddMinutes(_jwtSettings.Expire)
                 ) ;
             return new JwtSecurityTokenHandler().WriteToken(securityToken);
+        }
+
+        public ClaimsPrincipal GetInfoJwtToken(string JwtToken)
+        {
+            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = true,
+                ValidateIssuer = true,
+                ValidIssuer = _jwtSettings.Issuer,
+                ValidAudience = _jwtSettings.Audience,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = symmetricSecurityKey,
+                ValidateLifetime = false
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var principal = tokenHandler.ValidateToken(JwtToken, tokenValidationParameters, out SecurityToken securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new SecurityTokenException("Invalid token");
+            }
+            return principal;
+        }
+
+        public string RefreshTokenGeneration()
+        {
+            var randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
         }
     }
 }

@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RedZone.Domain.Users;
 
-namespace RedZone.App.Auth.Queries.Login
+namespace RedZone.App.Auth.Queries.VerifyEmail
 {
     public class VerifyEmailQueryHandler : IRequestHandler<VerifyEmailQuery, ErrorOr<AuthResult>>
     {
@@ -23,16 +23,6 @@ namespace RedZone.App.Auth.Queries.Login
         }
         public async Task<ErrorOr<AuthResult>> Handle(VerifyEmailQuery query, CancellationToken cancellationToken)
         {
-            await Task.CompletedTask;
-            if (_userRepository.GetUserByEmail(query.Email) is not User user)
-            {
-                return Errors.Auth.UnvalidEmail;
-            }
-            var result = _userRepository.Login(query.Email, query.password);
-            if (result is null)
-            {
-                return new[] { Errors.Auth.UnvalidPassword };
-            }
             
             return result;
         }

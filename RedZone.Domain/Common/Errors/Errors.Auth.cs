@@ -13,6 +13,7 @@ namespace RedZone.Domain.Common.Errors
         {
             public static Error UnvalidEmail = Error.Conflict(code: "User.UnvalidEmail", description: "Unvalid email");
             public static Error UnvalidPassword = Error.Conflict(code: "User.UnvalidPassword", description: "Unvalid password");
+            public static Error UnvalidRefreshToken = Error.Conflict(code: "User.Unvalid", description: "Please login again");
         }
         
     }

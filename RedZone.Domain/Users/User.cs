@@ -10,7 +10,7 @@ namespace RedZone.Domain.Users
         public string Name { get; private set; }
 
         // for the mobile (or web) JWT users
-        public string? RefreshToken { get; private set; }
+        public string? RefreshToken { get; set; }
 
         
 
@@ -27,6 +27,8 @@ namespace RedZone.Domain.Users
             Email = email;
             PhoneNumber = phoneNumber;
         }
+
+        
 
         public static User Create(
         string name,

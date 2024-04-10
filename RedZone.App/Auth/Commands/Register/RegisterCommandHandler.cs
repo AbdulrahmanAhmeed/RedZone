@@ -36,8 +36,10 @@ namespace RedZone.App.Auth.Commands.Register
             command.Email);
 
             _userRepository.AddUser(user,command.password);
+            _userRepository.Login(user.Email!, command.password);
             var token = _jwtTokenGenerator.GenerateToken(user);
-            return new AuthResult("Auth","dc",false, token);
+            var refreshToken = _jwtTokenGenerator.RefreshTokenGeneration();
+            return new AuthResult("Auth",refreshToken,false, token);
         }
     }
 }

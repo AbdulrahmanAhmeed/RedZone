@@ -13,7 +13,7 @@ namespace RedZone.api.Common.Mapping
         {
             config.NewConfig<RegisterRequest, RegisterCommand>()
                 .Map(des=>des.password,src=>src.password);
-            config.NewConfig<LoginRequest, LoginQuery>();
+            config.NewConfig<LoginRequest, VerifyEmailQuery>();
             config.NewConfig<AuthResult, AuthResponse>()
                 .Map(des=>des.Token,src=>src.Token)
                 .Map(des=>des.refreshToken,src=>src.refreshToken)

@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using RedZone.App.Auth.Queries.RefreshToken;
+using Microsoft.AspNetCore.Identity;
 
 namespace RedZone.api.Controllers
 {
@@ -46,7 +48,18 @@ namespace RedZone.api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            var query = _mapper.Map<LoginQuery>(request); 
+            var query = _mapper.Map<VerifyEmailQuery>(request); 
+            ErrorOr<AuthResult> result = await _mediator.Send(query);
+            return result.Match(
+                result => Ok(_mapper.Map<AuthResponse>(result)),
+                Errors => Problem(Errors)
+                );
+        }
+
+        [HttpPost("refreshToken")]
+        public async Task<IActionResult> RefreshToken(RefreshTokenRequest request)
+        {
+            var query = _mapper.Map<RefreshTokenQuery>(request);
             ErrorOr<AuthResult> result = await _mediator.Send(query);
             return result.Match(
                 result => Ok(_mapper.Map<AuthResponse>(result)),
